@@ -55,29 +55,34 @@ router.post('/', async (req, res, next) => {
 
 
   router.put('/:id', async (req, res, next) => {
+	try {
+	  const existingPerson = await Person.findById(req.params.id)
   
-	try{
-		const existingPerson = await Person.findById(req.params.id)
-
-		if (!existingPerson)
-		{
-			return res.status(404).end()
-		}	
-  
-		if (existingPerson.name !== req.body.name )
-		{
-		console.error("Name for edit request doesnt match, proceeding anyways")
-		}
-
-		existingPerson.number = req.body.number
-		const updated = await existingPerson.save()
-		return res.json(updated)
-	}
-	catch (error) {
-		next(error)
+	  if (!existingPerson) {
+		return res.status(404).end()
 	  }
+  
+	  if (req.body.name && existingPerson.name !== req.body.name) {
+		console.warn(
+		  `Name change detected: "${existingPerson.name}" → "${req.body.name}"`
+		)
+	  }
+  
+	  const updatedPerson = await Person.findByIdAndUpdate(
+		req.params.id,
+		req.body,
+		{
+		  new: true,
+		  runValidators: true,
+		  context: 'query'
+		}
+	  )
+  
+	  res.json(updatedPerson)
+	} catch (error) {
+	  next(error)
+	}
   })
-
 
 
 router.delete('/:id', (req, res, next) => {

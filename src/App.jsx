@@ -72,24 +72,33 @@ const App = () => {
 		}
 		if (existingPerson.number === NewNumber)
 		{
-			alert(`${NewName} is already added`)
 			showNotification(`${NewName} is already added`, "error")
 			return;
 		}
-		personService.update(existingPerson.id, updatedPerson).then(returnedPerson => {
-    	setPersons(prev => prev.map(p => p.id !== returnedPerson.id ? p : returnedPerson))})
-		showNotification(`Modified ${NewName}`, "success")
-		
-		return;	
-	}
-	console.log(NewName +" added");
-	personService.create(newPerson).then(response => {
-      setPersons(prev => prev.concat(response))
-    })
-	showNotification(`Added ${NewName}`, "success")
-	
+		personService.update(existingPerson.id, updatedPerson)
+		.then(returnedPerson => {
+    	setPersons(prev => prev.map(p => p.id !== returnedPerson.id ? p : returnedPerson))
+		showNotification(`Modified ${NewName}`, "success")	
+		})
+		.catch(error => {
+			const message = error.response?.data?.error || "Something went wrong"
+			showNotification(message, "error")
+			console.log(error.response.data.error)
+		  })
+			return;	
+		}
+		console.log(NewName +" added");
 
-  };
+		personService.create(newPerson).then(response => {
+		setPersons(prev => prev.concat(response))
+		showNotification(`Added ${NewName}`, "success")
+		})
+		.catch(error => {
+			const message = error.response?.data?.error || "Something went wrong"
+			showNotification(message, "error")
+			console.log(error.response.data.error)
+		  })
+  	}
 
 
   return (
@@ -100,7 +109,7 @@ const App = () => {
       <PersonForm addPerson={addPerson}/>
       <h2>Numbers</h2>
       {persons.map(person => (
- 	 <Persons key={person.name} person={person} filterWord={filterWord}  removePerson={removePerson} />
+ 	 <Persons key={person.id} person={person} filterWord={filterWord}  removePerson={removePerson} />
 	))}
     </div>
   )

@@ -8,10 +8,11 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "server": "json-server --port 3001 --watch db.json"
+    "server": "node server/index.js"
   },
   "dependencies": {
-    "axios": "^1.14.0",
+    "axios": "^1.15.0",
+    "cors": "^2.8.6",
     "dotenv": "^17.4.1",
     "express": "^5.2.1",
     "mongo": "^0.1.0",
