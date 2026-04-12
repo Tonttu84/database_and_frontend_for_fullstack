@@ -31,7 +31,7 @@ const App = () => {
     console.log('effect')
     personService.getAll().then(initialPersons => {
     console.log('promise fulfilled')
-    setPersons(initialPersons)
+    setPersons(Array.isArray(initialPersons) ? initialPersons : [])
   })
   }, []);
 
