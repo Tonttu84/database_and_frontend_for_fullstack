@@ -51,7 +51,6 @@ const App = () => {
 
   const addPerson = (event) => {
 	event.preventDefault(); // prevents page reload
-	console.log(structuredClone(event.target.elements.name.value));
 	const NewName = event.target.elements.name.value;
 	const NewNumber = event.target.elements.number.value;
 	const newPerson = {
