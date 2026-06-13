@@ -60,7 +60,7 @@ const App = () => {
 	  };
 	if (!NewName)
 	{
-		alert('Name is empty');
+		showNotification(`Name is empty`, "error")
 		return; 
 	}
 	const existingPerson = persons.find(p => p.name === NewName)
